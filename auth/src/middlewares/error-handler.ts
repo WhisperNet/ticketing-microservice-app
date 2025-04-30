@@ -9,6 +9,10 @@ export const errorHandler = (
   if (err instanceof CustomError) {
     res.status(err.statusCode).send({ errors: err.serializeErrors() });
   } else {
-    res.status(500).send({ errors: [{ message: 'Something went wrong' }] });
+    res
+      .status(500)
+      .send({
+        errors: [{ message: 'Something went wrong', field: err.stack }],
+      });
   }
 };

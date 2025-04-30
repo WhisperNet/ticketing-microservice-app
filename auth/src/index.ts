@@ -5,6 +5,7 @@ import { signupRouter } from './routes/signup';
 import { signoutRouter } from './routes/signout';
 import { errorHandler } from './middlewares/error-handler';
 import { NotFoundError } from './errors/not-found-error';
+import mongoose from 'mongoose';
 const app = express();
 
 app.use(express.json());
@@ -17,6 +18,17 @@ app.all('*splat', (req, res) => {
 });
 app.use(errorHandler);
 
-app.listen(3000, (err) => {
-  console.log('Auth Servise is listening on port 3000!');
-});
+const startUp = async () => {
+  try {
+    await mongoose.connect('mongodb://auth-mongodb-srv:27017/auth');
+    console.log('Database connected');
+    app.listen(3000, (err) => {
+      console.log('Auth Servise is listening on port 3000!');
+    });
+  } catch (err) {
+    console.log('Something went wrong while starting the app');
+    console.log(err);
+  }
+};
+
+startUp();
