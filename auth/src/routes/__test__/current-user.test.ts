@@ -1,7 +1,5 @@
 import request from 'supertest';
 import { app } from '../../app';
-import { response } from 'express';
-import { body } from 'express-validator';
 
 it('returns details about the current signin user', async () => {
   const reqCookie = await global.signin();

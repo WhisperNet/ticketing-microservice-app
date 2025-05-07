@@ -2,19 +2,12 @@ import request from 'supertest';
 import { app } from '../../app';
 
 it('response with cookies if given correct creds', async () => {
-  await request(app)
-    .post('/api/users/signup')
-    .send({
-      email: 'test@test.com',
-      password: 'password',
-    })
-    .expect(201);
-
+  await global.signin();
   const response = await request(app)
     .post('/api/users/signin')
     .send({
       email: 'test@test.com',
-      password: 'password',
+      password: 'test',
     })
     .expect(200);
 
