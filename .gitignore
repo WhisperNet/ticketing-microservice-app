@@ -52,6 +52,3 @@ coverage/
 
 # nextjs
 .next
-
-# Submodule excluded 
-tckt-common
