@@ -1,0 +1,3 @@
+[submodule "ticket-common"]
+	path = ticket-common
+	url = https://github.com/WhisperNet/ticket-common
