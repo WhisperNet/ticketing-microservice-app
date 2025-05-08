@@ -2,8 +2,10 @@ import express, { Request, Response } from 'express';
 import JWT from 'jsonwebtoken';
 import { User } from '../models/User';
 import { body } from 'express-validator';
-import { BadRequestError } from '../errors/bad-request-error';
-import { requestValidationHandler } from '../middlewares/request-validation-handler';
+import {
+  BadRequestError,
+  requestValidationHandler,
+} from '@whispernet-sust/ticket-common';
 const router = express.Router();
 
 router.post(

@@ -1,5 +1,5 @@
 import express from 'express';
-import { setCurrentUser } from '../middlewares/set-current-user';
+import { setCurrentUser } from '@whispernet-sust/ticket-common';
 const router = express.Router();
 
 router.get('/api/users/currentuser', setCurrentUser, (req, res) => {
