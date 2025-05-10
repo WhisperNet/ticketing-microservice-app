@@ -23,3 +23,11 @@ build:
         manual:
           - src: '**/*.js'
             dest: .
+    - image: whispernet/tickets
+      context: tickets
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - src: '**/*.js'
+            dest: .
