@@ -1,7 +1,7 @@
 import request from 'supertest';
 import { app } from '../../app';
 import { Ticket } from '../../models/ticket';
-// Removed incomplete import statement
+import { natsWrapper } from '../../nats-wrapper';
 
 it('has a reachbale post route at /api/tickets', async () => {
   const res = await request(app).post('/api/tickets').send({});
@@ -59,4 +59,27 @@ it('creates an entry for valid authorized request', async () => {
   expect(tickets.length).toEqual(1);
   expect(tickets[0].title).toEqual(title);
   expect(tickets[0].price).toEqual(price);
+});
+
+it('invokes publisher for a ticket created event', async () => {
+  let tickets = await Ticket.find({});
+  expect(tickets.length).toEqual(0);
+  const title = 'test';
+  const price = 10;
+
+  await request(app)
+    .post('/api/tickets')
+    .set('Cookie', global.signin())
+    .send({
+      title,
+      price,
+    })
+    .expect(201);
+
+  tickets = await Ticket.find({});
+  expect(tickets.length).toEqual(1);
+  expect(tickets[0].title).toEqual(title);
+  expect(tickets[0].price).toEqual(price);
+
+  expect(natsWrapper.client.publish).toHaveBeenCalled();
 });

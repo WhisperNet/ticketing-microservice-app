@@ -1,6 +1,7 @@
 import request from 'supertest';
 import { app } from '../../app';
 import mongoose from 'mongoose';
+import { natsWrapper } from '../../nats-wrapper';
 
 it('returns 404 if the ticket does not exits', async () => {
   const id = new mongoose.Types.ObjectId().toHexString();
@@ -67,4 +68,22 @@ it('updates the content for valid authorized request', async () => {
 
   expect(res.body.title).toEqual('updated');
   expect(res.body.price).toEqual(100);
+});
+
+it('invokes publisher for a ticket updated event', async () => {
+  const cookie = global.signin();
+  let res = await request(app)
+    .post('/api/tickets')
+    .set('Cookie', cookie)
+    .send({ title: 'test', price: 10 });
+  expect(201);
+  res = await request(app)
+    .put(`/api/tickets/${res.body.id}`)
+    .set('Cookie', cookie)
+    .send({ title: 'updated', price: 100 })
+    .expect(200);
+
+  expect(res.body.title).toEqual('updated');
+  expect(res.body.price).toEqual(100);
+  expect(natsWrapper.client.publish).toHaveBeenCalled();
 });

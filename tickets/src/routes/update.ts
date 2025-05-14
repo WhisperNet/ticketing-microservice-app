@@ -7,6 +7,8 @@ import {
 import express, { Request, Response } from 'express';
 import { body } from 'express-validator';
 import { Ticket } from '../models/ticket';
+import { TicketUpdatedPublisher } from '../events/publishers/ticket-updated-publisher';
+import { natsWrapper } from '../nats-wrapper';
 const router = express.Router();
 
 router.put(
@@ -30,6 +32,12 @@ router.put(
       price,
     });
     await foundTicket.save();
+    new TicketUpdatedPublisher(natsWrapper.client).publish({
+      id: foundTicket.id,
+      title: foundTicket.title,
+      price: foundTicket.price,
+      userId: foundTicket.userId,
+    });
     res.status(200).send(foundTicket);
   }
 );
