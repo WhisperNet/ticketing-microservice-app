@@ -4,6 +4,7 @@ import mongoose from 'mongoose';
 import { isIterationStatement } from 'typescript';
 import { Ticket } from '../../models/ticket';
 import { Order, OrderStatus } from '../../models/order';
+import { natsWrapper } from '../../nats-wrapper';
 
 it('returns 404 if ticket does not exist', async () => {
   await request(app)
@@ -43,4 +44,15 @@ it('creats an order if the ticket is available', async () => {
     .expect(201);
 });
 
-it.todo('Emits a created order event');
+it('Emits a created order event', async () => {
+  const ticket = await Ticket.build({
+    title: 'Test tckt',
+    price: 100,
+  });
+  await request(app)
+    .post('/api/orders')
+    .set('Cookie', global.signin())
+    .send({ ticketId: ticket.id })
+    .expect(201);
+  expect(natsWrapper.client.publish).toHaveBeenCalled();
+});
