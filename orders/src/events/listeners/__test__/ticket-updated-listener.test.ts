@@ -1,4 +1,7 @@
-import { TicketCreatedEvent } from '@whispernet-sust/ticket-common';
+import {
+  TicketCreatedEvent,
+  TicketUpdatedEvent,
+} from '@whispernet-sust/ticket-common';
 import { natsWrapper } from '../../../nats-wrapper';
 import { TicketCreatedListener } from '../ticket-created-listener';
 import mongoose from 'mongoose';
@@ -13,7 +16,7 @@ const startUp = async () => {
     price: 100,
   });
   const listener = new TicketUpdatedListener(natsWrapper.client);
-  const data: TicketCreatedEvent['data'] = {
+  const data: TicketUpdatedEvent['data'] = {
     id: ticket.id,
     title: 'test ticket was updated',
     price: 10,
