@@ -1,9 +1,11 @@
 import request from 'supertest';
 import { app } from '../../app';
 import { Ticket } from '../../models/ticket';
+import mongoose from 'mongoose';
 
 it('returns 401 for unaturhorized order access', async () => {
   const ticket = await Ticket.build({
+    id: new mongoose.Types.ObjectId().toHexString(),
     title: 'Test tckt',
     price: 100,
   });
@@ -21,6 +23,7 @@ it('returns 401 for unaturhorized order access', async () => {
 
 it('returns the order for aturhorized access', async () => {
   const ticket = await Ticket.build({
+    id: new mongoose.Types.ObjectId().toHexString(),
     title: 'Test tckt',
     price: 100,
   });

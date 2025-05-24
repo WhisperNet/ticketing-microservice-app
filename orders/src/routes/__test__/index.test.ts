@@ -1,6 +1,7 @@
 import request from 'supertest';
 import { app } from '../../app';
 import { Ticket, TicketDoc } from '../../models/ticket';
+import mongoose from 'mongoose';
 
 const ticketData = {
   title: 'Test ticket',
@@ -8,9 +9,18 @@ const ticketData = {
 };
 
 it('retruns all the orders for the user', async () => {
-  const ticket1 = await Ticket.build(ticketData);
-  const ticket2 = await Ticket.build(ticketData);
-  const ticket3 = await Ticket.build(ticketData);
+  const ticket1 = await Ticket.build({
+    ...ticketData,
+    id: new mongoose.Types.ObjectId().toHexString(),
+  });
+  const ticket2 = await Ticket.build({
+    ...ticketData,
+    id: new mongoose.Types.ObjectId().toHexString(),
+  });
+  const ticket3 = await Ticket.build({
+    ...ticketData,
+    id: new mongoose.Types.ObjectId().toHexString(),
+  });
 
   const user1 = global.signin();
   const user2 = global.signin();

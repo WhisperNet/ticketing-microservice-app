@@ -2,6 +2,8 @@ import { app } from './app';
 import { natsWrapper } from './nats-wrapper';
 import nats from 'node-nats-streaming';
 import mongoose from 'mongoose';
+import { OrderCreatedListener } from './events/listeners/order-created-listener';
+import { OrderCancelledListener } from './events/listeners/order-cancelled-listener';
 const startUp = async () => {
   try {
     if (!process.env.JWT_KEY) throw Error('JWT Environment variable not found');
@@ -28,6 +30,8 @@ const startUp = async () => {
     });
     process.on('SIGINT', () => natsWrapper.client.close());
     process.on('SIGTERM', () => natsWrapper.client.close());
+    new OrderCreatedListener(natsWrapper.client).listen();
+    new OrderCancelledListener(natsWrapper.client).listen();
     app.listen(3000, (err) => {
       console.log('tickets Servise is listening on port 3000!');
     });

@@ -1,4 +1,5 @@
 import {
+  BadRequestError,
   NotAuthorizeError,
   NotFoundError,
   requestValidationHandler,
@@ -27,6 +28,8 @@ router.put(
     if (!foundTicket) throw new NotFoundError();
     if (foundTicket.userId !== req.currentUser.id)
       throw new NotAuthorizeError();
+    if (foundTicket.orderId)
+      throw new BadRequestError("Cann't edit the ticket while it's booked");
     foundTicket.set({
       title,
       price,
@@ -37,6 +40,7 @@ router.put(
       title: foundTicket.title,
       price: foundTicket.price,
       userId: foundTicket.userId,
+      version: foundTicket.version,
     });
     res.status(200).send(foundTicket);
   }

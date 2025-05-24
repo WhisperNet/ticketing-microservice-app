@@ -3,9 +3,11 @@ import { app } from '../../app';
 import { Ticket } from '../../models/ticket';
 import { OrderStatus } from '@whispernet-sust/ticket-common';
 import { natsWrapper } from '../../nats-wrapper';
+import mongoose from 'mongoose';
 
 it('retruns 401 for unauthorized user', async () => {
   const ticket = await Ticket.build({
+    id: new mongoose.Types.ObjectId().toHexString(),
     title: 'test ticket',
     price: 100,
   });
@@ -24,6 +26,7 @@ it('retruns 401 for unauthorized user', async () => {
 
 it('cancels the order for an authorized user request', async () => {
   const ticket = await Ticket.build({
+    id: new mongoose.Types.ObjectId().toHexString(),
     title: 'test ticket',
     price: 100,
   });
@@ -44,6 +47,7 @@ it('cancels the order for an authorized user request', async () => {
 
 it('Emits a cancelled order event', async () => {
   const ticket = await Ticket.build({
+    id: new mongoose.Types.ObjectId().toHexString(),
     title: 'test ticket',
     price: 100,
   });

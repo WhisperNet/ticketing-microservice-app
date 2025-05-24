@@ -16,6 +16,7 @@ it('returns 404 if ticket does not exist', async () => {
 
 it('returns 400 if the ticket is already reserved', async () => {
   const ticket = await Ticket.build({
+    id: new mongoose.Types.ObjectId().toHexString(),
     title: 'Test tckt',
     price: 100,
   });
@@ -34,6 +35,7 @@ it('returns 400 if the ticket is already reserved', async () => {
 
 it('creats an order if the ticket is available', async () => {
   const ticket = await Ticket.build({
+    id: new mongoose.Types.ObjectId().toHexString(),
     title: 'Test tckt',
     price: 100,
   });
@@ -46,6 +48,7 @@ it('creats an order if the ticket is available', async () => {
 
 it('Emits a created order event', async () => {
   const ticket = await Ticket.build({
+    id: new mongoose.Types.ObjectId().toHexString(),
     title: 'Test tckt',
     price: 100,
   });
