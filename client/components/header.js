@@ -2,6 +2,8 @@ import Link from 'next/link';
 
 export default ({ currentUser }) => {
   const links = [
+    currentUser && { label: 'My Orders', href: '/orders' },
+    currentUser && { label: 'List Tickets', href: '/tickets/new' },
     !currentUser && { label: 'Sign up', href: '/auth/signup' },
     !currentUser && { label: 'Sign in', href: '/auth/signin' },
     currentUser && { label: 'Sign out', href: '/auth/signout' },

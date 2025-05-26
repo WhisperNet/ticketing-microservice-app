@@ -17,6 +17,7 @@ export class ExpirationCompleteListener extends Listener<ExpirationCompleteEvent
       'ticket'
     );
     if (!foundOrder) throw new Error('Order on found');
+    if (foundOrder.status === OrderStatus.Complete) return msg.ack();
     foundOrder.set({
       status: OrderStatus.Cancelled,
     });
